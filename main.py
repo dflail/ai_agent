@@ -26,6 +26,9 @@ def main():
         ],
     )
 
+    print(
+        f"Prompt tokens: {response.usage.prompt_tokens}"
+        f"\nResponse tokens: {response.usage.completion_tokens}")
     print("Response:")
     print(response.choices[0].message.content)
 
