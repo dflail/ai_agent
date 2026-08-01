@@ -1,8 +1,14 @@
+# Main entry point for the AI Code Assistant application. 
+# This script handles user input, initializes the OpenAI client, 
+# and generates content based on the provided prompt.
+
 import argparse
 import os
 
 from dotenv import load_dotenv
 from openai import OpenAI
+
+
 
 def main():
     parser = argparse.ArgumentParser(description="AI Code Assistant")
@@ -27,6 +33,7 @@ def main():
     generate_content(client, messages, args.verbose)
 
 
+
 def generate_content(client: OpenAI, messages: list, verbose: bool = False) -> None:
     response = client.chat.completions.create(
         model="openrouter/free",
@@ -41,6 +48,8 @@ def generate_content(client: OpenAI, messages: list, verbose: bool = False) -> N
             f"\nResponse tokens: {response.usage.completion_tokens}\n"
         )
     print(f"Response: \n{response.choices[0].message.content}")
+
+
 
 if __name__ == "__main__":
     main()
