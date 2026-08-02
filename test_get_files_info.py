@@ -1,0 +1,33 @@
+# This is a test file for the get_files_info function.
+
+from functions.get_files_info import get_files_info
+
+
+
+def test() -> None:
+
+    result = get_files_info("calculator", ".")
+    print("Result for current directory:")
+    print(result)
+    print("")
+
+    result = get_files_info("calculator", "/bin")
+    print("Result for '/bin' directory:")
+    print(result)
+    print("")
+
+    result = get_files_info("calculator", "../")
+    print("Result for '../' directory:")
+    print(result)
+    print("")
+
+
+    result = get_files_info("calculator", "main.py")
+    print("Result for 'main.py':")
+    print(result)
+
+
+
+if __name__ == "__main__":
+    test()
+
