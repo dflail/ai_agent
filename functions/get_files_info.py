@@ -3,6 +3,8 @@
 
 import os
 
+from openai import files
+
 
 
 def get_files_info(working_directory: str, directory: str = ".") -> str:
@@ -16,7 +18,21 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
         if not os.path.isdir(target_dir):
             return f'Error: "{directory}" is not a directory'
 
-        return f'Success: "{directory}" is within the working directory'
+        files = os.listdir(target_dir)
+        if not files:
+            return f'No files found in the directory: "{directory}"'
+        return get_user_output(files, target_dir)
     
     except Exception as e:
         return f"Error: {e}"
+
+
+# This function generates a formatted string containing information about the files in the specified directory.
+def get_user_output(list_of_files: list, directory: str) -> str:
+    result = f"Result for {directory} directory:\n"
+    files = list_of_files
+
+    for file in files:
+        result += (f"- {file}: file_size={os.path.getsize(os.path.join(os.path.abspath(directory), file))} bytes, is_dir={os.path.isdir(os.path.join(os.path.abspath(directory), file))}\n")
+
+    return result
