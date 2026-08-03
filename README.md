@@ -1,4 +1,4 @@
-A small scale version of agents like Claude Code. 
+Clod code. 
 
 Requirements:
   a .env file containing the following:
