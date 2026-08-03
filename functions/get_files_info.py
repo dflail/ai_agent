@@ -1,5 +1,6 @@
-# This function checks if a given directory is within the specified working directory.
-# It returns a success message if the directory is valid and an error message if it is not.
+# This code defines a function `get_files_info` that checks if a given directory is within a specified working
+# directory and returns information about the files in that directory. 
+# It also includes a helper function `get_formatted_output` that formats the output of the file information.
 
 import os
 
@@ -7,7 +8,19 @@ from openai import files
 
 
 
+# This function generates a formatted string containing information about the files in the specified directory.
 def get_files_info(working_directory: str, directory: str = ".") -> str:
+
+    # This function generates a formatted string containing information about the files in the specified directory.
+    def get_formatted_output(list_of_files: list, directory: str) -> str:
+        result = f"Result for {directory} directory:\n"
+        files = list_of_files
+
+        for file in files:
+            result += (f"- {file}: file_size={os.path.getsize(os.path.join(os.path.abspath(directory), file))} bytes, is_dir={os.path.isdir(os.path.join(os.path.abspath(directory), file))}\n")
+
+        return result
+  
     try:
         abs_work_dir = os.path.abspath(working_directory)
         target_dir = os.path.normpath(os.path.join(abs_work_dir, directory))
@@ -21,14 +34,12 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
         files = os.listdir(target_dir)
         if not files:
             return f'No files found in the directory: "{directory}"'
-        return get_user_output(files, target_dir)
+        return get_formatted_output(files, target_dir)
     
     except Exception as e:
         return f"Error: {e}"
 
-
-# This function generates a formatted string containing information about the files in the specified directory.
-def get_user_output(list_of_files: list, directory: str) -> str:
+def get_formatted_output(list_of_files: list, directory: str) -> str:
     result = f"Result for {directory} directory:\n"
     files = list_of_files
 
