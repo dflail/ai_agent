@@ -9,7 +9,6 @@ import os
 from config import MAX_CHARS
 
 
-# This function reads the content of a file located at `file_path` within the specified `working_directory`.
 def get_file_content(working_directory: str, file_path: str) -> str:
     try:
         abs_working_dir = os.path.abspath(working_directory)

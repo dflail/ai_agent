@@ -1,3 +1,5 @@
+#  This is a test file for the get_file_content function.
+
 from functions.get_file_content import get_file_content
 
 
