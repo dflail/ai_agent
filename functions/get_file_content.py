@@ -1,8 +1,15 @@
+# This function reads the content of a file located at `file_path` within the specified `working_directory`.
+# It ensures that the file is within the working directory and does not exceed a maximum character limit
+# defined by `MAX_CHARS`. If the file is too large, it truncates the content and appends a message
+# indicating that the file has been truncated. The function handles errors gracefully, returning appropriate
+# error messages for various failure scenarios.
+
 import os
 
 from config import MAX_CHARS
 
 
+# This function reads the content of a file located at `file_path` within the specified `working_directory`.
 def get_file_content(working_directory: str, file_path: str) -> str:
     try:
         abs_working_dir = os.path.abspath(working_directory)
