@@ -9,18 +9,7 @@ from openai import files
 
 
 # This function generates a formatted string containing information about the files in the specified directory.
-def get_files_info(working_directory: str, directory: str = ".") -> str:
-
-    # This function generates a formatted string containing information about the files in the specified directory.
-    def get_formatted_output(list_of_files: list, directory: str) -> str:
-        result = f"Result for {directory} directory:\n"
-        files = list_of_files
-
-        for file in files:
-            result += (f"- {file}: file_size={os.path.getsize(os.path.join(os.path.abspath(directory), file))} bytes, is_dir={os.path.isdir(os.path.join(os.path.abspath(directory), file))}\n")
-
-        return result
-  
+def get_files_info(working_directory: str, directory: str = ".") -> str:  
     try:
         abs_work_dir = os.path.abspath(working_directory)
         target_dir = os.path.normpath(os.path.join(abs_work_dir, directory))
@@ -39,6 +28,9 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
     except Exception as e:
         return f"Error: {e}"
 
+
+
+# This helper function formats the output of the file information, including file size and whether it is a directory.
 def get_formatted_output(list_of_files: list, directory: str) -> str:
     result = f"Result for {directory} directory:\n"
     files = list_of_files
