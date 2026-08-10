@@ -7,6 +7,7 @@ import os
 
 from dotenv import load_dotenv
 from openai import OpenAI
+from prompts import system_prompt
 
 
 
@@ -25,7 +26,11 @@ def main():
         base_url="https://openrouter.ai/api/v1",
         api_key=api_key
     )
-    messages=[{"role": "user", "content": args.user_prompt}]
+
+    messages=[
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": args.user_prompt}
+    ]
 
     if args.verbose:
         print(f"User prompt: {args.user_prompt}\n")
