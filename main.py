@@ -3,11 +3,13 @@
 # and generates content based on the provided prompt.
 
 import argparse
+import json
 import os
 
 from dotenv import load_dotenv
 from openai import OpenAI
 from prompts import system_prompt
+from functions.call_function import available_functions
 
 
 
@@ -43,6 +45,7 @@ def generate_content(client: OpenAI, messages: list, verbose: bool = False) -> N
     response = client.chat.completions.create(
         model="openrouter/free",
         messages=messages,
+        tools=available_functions,
     )
     if not response.usage:
         raise RuntimeError("Error: API response appears to be malformed.")
@@ -54,6 +57,17 @@ def generate_content(client: OpenAI, messages: list, verbose: bool = False) -> N
         )
     print(f"Response: \n{response.choices[0].message.content}")
 
+    message = response.choices[0].message
+    if not message.tool_calls:
+        print("Response:")
+        print(message.content)
+        return
+
+    for tool_call in message.tool_calls:
+        if tool_call.type != "function":
+            continue
+        function_args = json.loads(tool_call.function.arguments or "{}")
+        print(f"Calling function: {tool_call.function.name}({function_args})")
 
 
 if __name__ == "__main__":
