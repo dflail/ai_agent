@@ -12,7 +12,6 @@ def write_file(working_directory: str, file_path: str, content: str) -> str:
             return f'Error: Cannot write to "{file_path}" as it is outside the permitted working directory'
 
         # Ensure the directory exists
-        print(f"DEBUGGING: {os.path.dirname(abs_file_path)}")
         os.makedirs(os.path.dirname(abs_file_path), exist_ok=True)
 
         with open(abs_file_path, 'w') as file:
@@ -31,15 +30,20 @@ schema_write_file = {
     "type": "function",
     "function": {
         "name": "write_file",
-        "description": "Writes content to a file within the specified working directory",
+        "description": "Writes text content to a specified file within the working directory (overwriting if the file exists)",
         "parameters": {
             "type": "object",
             "properties": {
-                "directory": {
+                "file_path": {
                     "type": "string",
-                    "description": "Directory path to list files from, relative to the working directory (default is the working directory itself)",
+                    "description": "Path to the file to write, relative to the working directory",
+                },
+                "content": {
+                    "type": "string",
+                    "description": "Text content to write to the file",
                 },
             },
+            "required": ["file_path", "content"],
         },
     },
 }

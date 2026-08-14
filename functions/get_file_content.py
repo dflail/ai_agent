@@ -32,16 +32,16 @@ schema_get_file_content = {
     "type": "function",
     "function": {
         "name": "get_file_content",
-        "description": "Reads the content of a file within the specified working directory, truncating it if it exceeds the maximum character limit",
+        "description": f"Retrieves the content (at most {MAX_CHARS} characters) of a specified file within the working directory",
         "parameters": {
             "type": "object",
             "properties": {
                 "file_path": {
                     "type": "string",
-                    "description": "Path to the file to read, relative to the working directory"
-                }
+                    "description": "Path to the file to read, relative to the working directory",
+                },
             },
-            "required": ["file_path"]
-        }
-    }
+            "required": ["file_path"],
+        },
+    },
 }
