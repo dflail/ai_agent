@@ -55,7 +55,6 @@ def generate_content(client: OpenAI, messages: list, verbose: bool = False) -> N
             f"Prompt tokens: {response.usage.prompt_tokens}\n"
             f"\nResponse tokens: {response.usage.completion_tokens}\n"
         )
-    print(f"Response: \n{response.choices[0].message.content}")
 
     message = response.choices[0].message
     if not message.tool_calls:
