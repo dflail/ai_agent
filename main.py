@@ -4,7 +4,9 @@
 
 import argparse
 import os
+import sys
 
+from config import MAX_ATTEMPTS
 from dotenv import load_dotenv
 from openai import OpenAI
 from prompts import system_prompt
@@ -35,11 +37,22 @@ def main():
     if args.verbose:
         print(f"User prompt: {args.user_prompt}\n")
 
-    generate_content(client, messages, args.verbose)
+    for _ in range(MAX_ATTEMPTS):
+        try:
+            final_response = generate_content(client, messages, args.verbose)
+            if final_response:
+                print("Final response:")
+                print(final_response)
+                return
+        except Exception as e:
+            print(f"Error in generate_content: {e}")
+
+    print(f"Maximum iterations ({MAX_ATTEMPTS}) reached")
+    sys.exit(1)
 
 
 
-def generate_content(client: OpenAI, messages: list, verbose: bool = False) -> None:
+def generate_content(client: OpenAI, messages: list, verbose: bool = False) -> str | None:
     response = client.chat.completions.create(
         model="openrouter/free",
         messages=messages,
@@ -55,15 +68,15 @@ def generate_content(client: OpenAI, messages: list, verbose: bool = False) -> N
         )
 
     message = response.choices[0].message
+    messages.append(message)
+
     if not message.tool_calls:
-        print("Response:")
-        print(message.content)
-        return
+        return message.content
 
     for tool_call in message.tool_calls:
         if tool_call.type != "function":
             continue
-            # raise Exception(f"Error: Unexpected tool call type: {tool_call.type}")
+
         result_message = call_function(tool_call, verbose)
         if not result_message['content']:
             raise Exception(f"Error: Function {tool_call.function.name} returned no content.")
@@ -71,6 +84,9 @@ def generate_content(client: OpenAI, messages: list, verbose: bool = False) -> N
         if verbose:
             print(f"-> {result_message['content']}")
 
+        messages.append(result_message)
+
+    return None
 
 if __name__ == "__main__":
     main()
